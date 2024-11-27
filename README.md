@@ -5,11 +5,13 @@ The official implementation for the paper "SLED: Self Logits Evolution Decoding 
 
 [//]: # ([<sup>1</sup>]&#40;https://cei.pratt.duke.edu/&#41; ![Duke University Logo]&#40;assets/cei_log.jpg&#41;[<sup>2</sup>]&#40;https://research.google.com/&#41; ![Google Research Logo]&#40;assets/google_log.jpg&#41;)
 
-<sup>1</sup>[![Duke University Logo](assets/cei_log.jpg)](https://cei.pratt.duke.edu/) <sup>2</sup>[![Google Research Logo](assets/google_log.jpg)](https://research.google.com/)
+<sup>1</sup>[![Duke University Logo](assets/cei_log.jpg)](https://cei.pratt.duke.edu/)
+
+<sup>2</sup>[![Google Research Logo](assets/google_log.jpg)](https://research.google.com/)
 
 
 ## 📌News
-[2024.11.25] - We released the latest code on Github.  
+[2024.11.27] - We released the latest code on Github.  
 [2024.11.26] - We launched the official project website launched [here](https://jayzhang42.github.io/sled_page/)!  
 [2024.11.01] - The paper is available at [Arxiv](https://arxiv.org/abs/2411.02433).  
 [2024.09.25] - Our SLED paper accepted for NeurIPS 2024!  
@@ -33,7 +35,7 @@ We introduce <strong>S</strong>elf <strong>L</strong>ogits <strong>E</strong>vol
 
 ## 🛠Installation
 - **Hardward**: We recommend using the NVIDIA A100 80GB GPU for efficient inference. While this configuration is recommended, other hardware configurations also work but could yield slightly different performance outcomes.
-- **Python**: Recommended to use Python 3.8 or higher.
+- **Python**: Recommended to use Python 3.10 or higher.
 - **PyTorch**: We recommend using PyTorch version 2.0.1 with CUDA 11.8. You can install this specific version of PyTorch using the following command:
   ```bash
   pip3 install torch==2.0.1 --index-url https://download.pytorch.org/whl/cu118
@@ -89,7 +91,7 @@ python run_gsm8k.py  --model-name meta-llama/Llama-2-7b-hf  --data-path Data/gsm
 Additional experiments involving various models can be found in the `scripts` folder.
 
 
-##💡Important Recommendations
+## 💡Important Recommendations
 
 
 We strongly encourage you to try `SLED` method on your own **open-ended generation** tasks and datasets. To ensure good performance and effective outcomes, consider the following recommended parameters:
