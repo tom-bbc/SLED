@@ -1,7 +1,7 @@
 # <span style="color:#4285F4">S</span><span style="color:#EA4335">L</span><span style="color:#FBBC04">E</span><span style="color:#34A853">D</span>: Self Logits Evolution Decoding for Improving Factuality in Large Language Models [NeurIPS 2024]
 The official implementation for the paper "SLED: Self Logits Evolution Decoding for Improving Factuality in Large Language Models"
 
-**Jianyi Zhang<sup>1</sup>** **Da-Cheng Juan<sup>2</sup>** **Cyrus Rashtchian<sup>2</sup>** **Chun-Sung Ferng<sup>2</sup>** **Heinrich Jiang<sup>2</sup>** **Yiran Chen<sup>1</sup>**
+**[Jianyi Zhang<sup>1</sup>](https://jayzhang42.github.io/)** **Da-Cheng Juan<sup>2</sup>** **Cyrus Rashtchian<sup>2</sup>** **Chun-Sung Ferng<sup>2</sup>** **Heinrich Jiang<sup>2</sup>** **Yiran Chen<sup>1</sup>**
 
 [//]: # ([<sup>1</sup>]&#40;https://cei.pratt.duke.edu/&#41; ![Duke University Logo]&#40;assets/cei_log.jpg&#41;[<sup>2</sup>]&#40;https://research.google.com/&#41; ![Google Research Logo]&#40;assets/google_log.jpg&#41;)
 
