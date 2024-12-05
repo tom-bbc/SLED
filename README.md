@@ -115,7 +115,7 @@ We would greatly appreciate it if you cite our SLED paper when you find our repo
 ```
 @inproceedings{
 zhang2024sled,
-title={{SLED}: Self Logits Evolution Decoding for Improving Factuality in Large Language Models},
+title={SLED: Self Logits Evolution Decoding for Improving Factuality in Large Language Models},
 author={Jianyi Zhang and Da-Cheng Juan and Cyrus Rashtchian and Chun-Sung Ferng and Heinrich Jiang and Yiran Chen},
 booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems (NeurIPS 2024},
 year={2024},
