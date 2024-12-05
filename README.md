@@ -24,7 +24,7 @@ The official implementation for our NeurIPS 2024 paper "SLED: Self Logits Evolut
 - <span style="color:#4285F4">High Compatibility:</span> SLED can be flexibly combined with other decoding methods, enhancing their performance.  
 - <span style="color:#4285F4">High-Quality Outputs:</span> Reduces repetition, ensures fluent responses.  
 - <span style="color:#4285F4">Negligible Computational Overhead:</span> Minimal additional costs, suited for real-time use.  
-- <span style="color:#4285F4">Interpretability:</span> Provides new insights into layer-wise contrastive decoding methods.  
+- <span style="color:#4285F4">Interpretability:</span> Provides new insights into inference-time computing algorithms.  
 
 
 ## 🔮Overview of SLED
