@@ -1,5 +1,5 @@
 # <span style="color:#4285F4">S</span><span style="color:#EA4335">L</span><span style="color:#FBBC04">E</span><span style="color:#34A853">D</span>: Self Logits Evolution Decoding for Improving Factuality in Large Language Models [NeurIPS 2024]
-The official implementation for the paper "SLED: Self Logits Evolution Decoding for Improving Factuality in Large Language Models"
+The official implementation for our NeurIPS 2024 paper "SLED: Self Logits Evolution Decoding for Improving Factuality in Large Language Models"
 
 **[Jianyi Zhang<sup>1</sup>](https://jayzhang42.github.io/)** **Da-Cheng Juan<sup>2</sup>** **Cyrus Rashtchian<sup>2</sup>** **Chun-Sung Ferng<sup>2</sup>** **Heinrich Jiang<sup>2</sup>** **Yiran Chen<sup>1</sup>**
 
@@ -19,7 +19,7 @@ The official implementation for the paper "SLED: Self Logits Evolution Decoding 
 
 ## 🧨 Why Choose SLED?
 
-- <span style="color:#4285F4">Model Versatility:</span> Compatible with most large language model (LLM) families due to their multi-layered structures, such as LLaMA 2, LLaMA 3, and MoE LLMs; scalable from 2B to 70B parameters.
+- <span style="color:#4285F4">Model Versatility:</span> Compatible with most large language model (LLM) families due to their multi-layered structures, such as LLaMA 2, LLaMA 3, Gemma, and MoE LLMs; scalable from 2B to 70B parameters.
 - <span style="color:#4285F4">Task Versatility:</span> Tested with factual accuracy enhancement across various tasks and benchmarks, such as TruthfulQA, StrategyQA, FACTOR, GSM8K, HotPotQA, Natural Questions, and TriviaQA.
 - <span style="color:#4285F4">High Compatibility:</span> SLED can be flexibly combined with other decoding methods, enhancing their performance.  
 - <span style="color:#4285F4">High-Quality Outputs:</span> Reduces repetition, ensures fluent responses.  
@@ -28,13 +28,13 @@ The official implementation for the paper "SLED: Self Logits Evolution Decoding 
 
 
 ## 🔮Overview of SLED
-![SLED](assets/sled_framework.jpg)
+![SLED](assets/sled_page.png)
 
 We introduce <strong>S</strong>elf <strong>L</strong>ogits <strong>E</strong>volution <strong>D</strong>ecoding (SLED), a novel factuality decoding approach that leverages the latent knowledge within LLMs by contrasting the final layer’s logits with early layers' logits. SLED tracks the logits evolution process to unearth the latent knowledge within LLMs, and enables the self-evolution of the output distribution further to align it more closely with real-world facts.  
 
 
 ## 🛠Installation
-- **Hardward**: We recommend using the NVIDIA A100 80GB GPU for efficient inference. While this configuration is recommended, other hardware configurations also work but could yield slightly different performance outcomes.
+- **Hardware**: We recommend using the NVIDIA A100 80GB GPU for efficient inference. While this configuration is recommended, other hardware configurations also work but could yield slightly different performance outcomes.
 - **Python**: Recommended to use Python 3.10 or higher.
 - **PyTorch**: We recommend using PyTorch version 2.0.1 with CUDA 11.8. You can install this specific version of PyTorch using the following command:
   ```bash
@@ -113,11 +113,13 @@ This codebase is based on the official repo of [DoLa](https://github.com/voidism
 
 We would greatly appreciate it if you cite our SLED paper when you find our repository helpful for your research or projects.
 ```
-@article{zhang2024sled,
-  title={SLED: Self Logits Evolution Decoding for Improving Factuality in Large Language Models},
-  author={Zhang, Jianyi and Juan, Da-Cheng and Rashtchian, Cyrus and Ferng, Chun-Sung and Jiang, Heinrich and Chen, Yiran},
-  journal={arXiv preprint arXiv:2411.02433},
-  year={2024}
+@inproceedings{
+zhang2024sled,
+title={{SLED}: Self Logits Evolution Decoding for Improving Factuality in Large Language Models},
+author={Jianyi Zhang and Da-Cheng Juan and Cyrus Rashtchian and Chun-Sung Ferng and Heinrich Jiang and Yiran Chen},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems (NeurIPS 2024},
+year={2024},
+url={https://arxiv.org/abs/2411.02433}
 }
 ```
 
