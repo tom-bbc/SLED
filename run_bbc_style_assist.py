@@ -1,15 +1,22 @@
 import argparse
 import json
+import re
 import warnings
 
 import transformers
 from sled_decoding import SLED_DecodedLLM_GSM8K as SLED_DecodedLLM
-from utils.utils_gsm8k import build_prompt, clean_answer, is_correct, set_seed
+from utils.utils_gsm8k import set_seed
 
 transformers.logging.set_verbosity(100)
 
 
-def main(prompt: str, decoding_method: str) -> dict:
+def main(
+    prompt: str,
+    decoding_method: str,
+    evolution_rate: float,
+    evolution_scale: int,
+    repetition_penalty: float,
+) -> dict:
     # Hyperparameters
     model_name = "meta-llama/Llama-2-7b-hf"
     num_gpus = "auto"
@@ -19,14 +26,11 @@ def main(prompt: str, decoding_method: str) -> dict:
 
     max_new_tokens = 256
     temperature = 0.9
-    repetition_penalty = 1.0
     relative_top = 0.1
     relative_top_value = -1000.0
 
     do_sample = False
     seed = 42
-    evolution_rate = 2
-    evolution_scale = 10
 
     set_seed(seed)
 
@@ -86,10 +90,7 @@ def main(prompt: str, decoding_method: str) -> dict:
     print(f" << * >> Generated completion: \n{completion_response}", end="\n\n")
 
     # Clean generated output
-    if completion_response.startswith("\n"):
-        cleaned_response = completion_response[1:]
-    else:
-        cleaned_response = completion_response
+    cleaned_response = re.sub(r"\\n", " ", completion_response)
 
     cleaned_response = cleaned_response.strip()
     prompt = prompt.strip()
@@ -116,18 +117,25 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--prompt", "-p", type=str, default=None)
     parser.add_argument(
-        "--decoding-method",
+        "--decoding_method",
         "-d",
         type=str,
         default="VanillaGreedy",
         choices=["VanillaGreedy", "SLED", "dola"],
     )
+    parser.add_argument("--evolution_rate", type=float, default=2)
+    parser.add_argument("--evolution_scale", type=int, default=10)
+    parser.add_argument("--repetition_penalty", type=float, default=1.0)
 
     args = parser.parse_args()
     prompt = args.prompt
     decoding_method = args.decoding_method
+    evolution_rate = args.evolution_rate
+    evolution_scale = args.evolution_scale
+    repetition_penalty = args.repetition_penalty
 
     if prompt is None:
         prompt = "Jack has a stack of books that is 12 inches thick. He knows from experience that 80 pages is one inch thick. If he has 6 books, how many pages is each one on average?"  # noqa
 
-    main(prompt, decoding_method)
+    # "You are a BBC Journalist. Please find below a news article from the Local Democracy Reporting Service. Please re-write the article in the style of a BBC News Article? Do not change any of the facts in the article - simply modify the text to follow the BBC's style guide.\n\nLDRS Article:\nEast Riding leisure centres could start closing earlier, the council portfolio holder in charge of them has said.\nEast Riding Council's Culture and Leisure Portfolio Holder Cllr Mike Medini said there were no plans to close any leisure centres but some could shut earlier when visitor numbers are low.\nThe portfolio holder added the authority was doing everything it could to lessen the impact on leisure services after councils elsewhere had cut them back.\nA full meeting of East Riding Council also saw Council Leader Cllr Jonathan Owen say some serious decisions around spending lay ahead amid mounting financial uncertainty.\nThe leader said senior councillors were currently in talks with officers about its budget position going forward amid a widening hole in the authority's finances.\nHe added rising energy costs and high pay settlements were among the factors driving up spending as inflation continues to climb and the cost of living crisis deepens.\nCllr Medini said leisure centres' important role in helping communities mattered more than ever given the current climate.\nBut he added the council was looking at scaling opening hours back.\nThe portfolio holder said: \"I'd like to reassure residents, visitors and businesses that there are no plans to close leisure centres.\n\"But we are looking at closing some pools a few minutes early late at night when there's very little demand.\n\"Our approach is to regularly review and we're doing everything we can to reduce the impact on centres.\n\"Leisure centres play a vital role in supporting communities, they help in the council's prevention and early intervention approach to health and they help improve quality of life.\n\"There's never been a more important time to support communities.\"\n\nBBC Article:\n"
+    main(prompt, decoding_method, evolution_rate, evolution_scale, repetition_penalty)
