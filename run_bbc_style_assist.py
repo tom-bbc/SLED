@@ -32,8 +32,10 @@ def main(prompt: str, decoding_method: str) -> dict:
 
     # Instantiate LLM with SLED decoding
     model = SLED_DecodedLLM(model_name, device, num_gpus, max_gpu_memory)
+
     # stop_word_list = ["Q:", "\\end{code}", "\n", ". "]
     # model.set_stop_words(stop_word_list)
+
     print(f"\n << * >> Instantiated model: '{model_name}'")
 
     # Setup layers to use in decoding process
@@ -89,8 +91,12 @@ def main(prompt: str, decoding_method: str) -> dict:
     else:
         cleaned_response = completion_response
 
-    cleaned_response = cleaned_response.replace(prompt, "")
-    cleaned_response = cleaned_response.split("\n")[0]
+    cleaned_response = cleaned_response.strip()
+    prompt = prompt.strip()
+
+    if cleaned_response.startswith(prompt):
+        cleaned_response = cleaned_response[len(prompt) :]
+        cleaned_response = cleaned_response.strip()
 
     # Formulate model output structures
     result_dict = {
