@@ -18,14 +18,11 @@ def main(prompt: str, decoding_method: str) -> dict:
     early_exit_layers = None
 
     max_new_tokens = 256
-    top_p = 0.95
-    top_k = 0
     temperature = 0.9
     repetition_penalty = 1.0
     relative_top = 0.1
     relative_top_value = -1000.0
 
-    do_sample = True
     seed = 42
     evolution_rate = 2
     evolution_scale = 10
@@ -36,18 +33,18 @@ def main(prompt: str, decoding_method: str) -> dict:
     model = SLED_DecodedLLM(model_name, device, num_gpus, max_gpu_memory)
     stop_word_list = ["Q:", "\\end{code}", "\n", ". "]
     model.set_stop_words(stop_word_list)
-    print(f"Instantiated model: '{model_name}'")
+    print(f"\n << * >> Instantiated model: '{model_name}'")
 
     # Setup layers to use in decoding process
     if decoding_method == "VanillaGreedy":
         if early_exit_layers is not None:
             warnings.warn(
-                "The 'early_exit_layers' argument should be None when using Vanilla greedy decoding."
+                " -- * -- The 'early_exit_layers' argument should be None when using Vanilla greedy decoding."
             )
 
         mature_layer = None
         candidate_premature_layers = None
-        print(" - Decoding mode: Vanilla greedy decoding from the final layer")
+        print(" << * >> Decoding mode: Vanilla greedy decoding from the final layer")
 
     else:
         if early_exit_layers is None:
@@ -59,21 +56,18 @@ def main(prompt: str, decoding_method: str) -> dict:
         candidate_premature_layers = early_exit_layers[:-1]
 
         print(
-            f" - Decoding mode: {decoding_method} decoding"
-            f"\n - Final layer: {mature_layer}"
-            f"\n - Premature layers: {candidate_premature_layers}"
+            f" << * >> Decoding mode: {decoding_method} decoding"
+            f"\n << * >> Final layer: {mature_layer}"
+            f"\n << * >> Premature layers: {candidate_premature_layers}"
         )
 
     # Formulate model input structures
-    print(f"Input prompt: \n{prompt}", end="\n\n")
+    print(f" << * >> Input prompt: \n{prompt}", end="\n\n")
 
     # Generate response over data sample
     completion_response, c_dist = model.generate(
         prompt,
         max_new_tokens=max_new_tokens,
-        do_sample=do_sample,
-        top_p=top_p,
-        top_k=top_k,
         temperature=temperature,
         repetition_penalty=repetition_penalty,
         mode=decoding_method,
@@ -85,7 +79,7 @@ def main(prompt: str, decoding_method: str) -> dict:
         evolution_scale=evolution_scale,
     )
 
-    print(f"Generated completion: \n{completion_response}", end="\n\n")
+    print(f" << * >> Generated completion: \n{completion_response}", end="\n\n")
 
     # Formulate model output structures
     result_dict = {
@@ -94,7 +88,7 @@ def main(prompt: str, decoding_method: str) -> dict:
         "c_dist": c_dist,
     }
 
-    print("Results:")
+    print(" << * >> Results:")
     print(json.dumps(result_dict, indent=4))
 
     return result_dict
