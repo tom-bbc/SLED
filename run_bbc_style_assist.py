@@ -1,3 +1,4 @@
+import argparse
 import json
 import warnings
 
@@ -8,14 +9,12 @@ from utils.utils_gsm8k import build_prompt, clean_answer, is_correct, set_seed
 transformers.logging.set_verbosity(100)
 
 
-def main():
+def main(prompt: str, decoding_method: str) -> dict:
     # Hyperparameters
     model_name = "meta-llama/Llama-2-7b-hf"
     num_gpus = "auto"
     max_gpu_memory = 80
     device = "cuda"
-    data_path = "Data/FACTOR/wiki_factor.csv"
-    output_path = "./gsm8k_result"
     early_exit_layers = None
 
     max_new_tokens = 256
@@ -27,9 +26,7 @@ def main():
     relative_top_value = -1000.0
 
     do_sample = True
-    do_shuffle = False
     seed = 42
-    decoding_method = "VanillaGreedy"  # Choices: "VanillaGreedy","SLED", "dola"
     evolution_rate = 2
     evolution_scale = 10
 
@@ -50,7 +47,7 @@ def main():
 
         mature_layer = None
         candidate_premature_layers = None
-        print("Vanilla greedy decoding from the final layer")
+        print(" - Decoding mode: Vanilla greedy decoding from the final layer")
 
     else:
         if early_exit_layers is None:
@@ -62,11 +59,17 @@ def main():
         candidate_premature_layers = early_exit_layers[:-1]
 
         print(
-            f"MODE: {decoding_method} decoding with the final layer: {mature_layer} and premature layers: {candidate_premature_layers}"  # noqa
+            f" - Decoding mode: {decoding_method} decoding"
+            f"\n - Final layer: {mature_layer}"
+            f"\n - Premature layers: {candidate_premature_layers}"
         )
 
     # Formulate model input structures
-    generate_kwargs = dict(
+    print(f"Input prompt: \n{prompt}", end="\n\n")
+
+    # Generate response over data sample
+    completion_response, c_dist = model.generate(
+        prompt,
         max_new_tokens=max_new_tokens,
         do_sample=do_sample,
         top_p=top_p,
@@ -82,27 +85,14 @@ def main():
         evolution_scale=evolution_scale,
     )
 
-    input_text = "Q: Jack has a stack of books that is 12 inches thick. He knows from experience that 80 pages is one inch thick. If he has 6 books, how many pages is each one on average? A:"  # noqa
-    label = "There are 960 pages because 80 x 12 = <<80*12=960>>960 Each book is 160 pages because 960 / 6 = <<960/6=160>>160 #### 160"  # noqa
-
-    # input_text = build_prompt(sample, do_shuffle)
-    print(f"Formatted prompt: '{input_text}'")
-
-    # Generate response over data sample
-    model_completion, c_dist = model.generate(input_text, **generate_kwargs)
-    print(f"Generated completion: {model_completion}")
-
-    model_answer = clean_answer(model_completion)
-    print(f"Cleaned response: {model_answer}")
+    print(f"Generated completion: \n{completion_response}", end="\n\n")
 
     # Formulate model output structures
-    result_dict = {}
-    is_cor = is_correct(model_answer, label)
-
-    result_dict["is_correct"] = is_cor
-    result_dict["model_answer"] = model_answer
-    result_dict["model_completion"] = model_completion
-    result_dict["full_input_text"] = input_text
+    result_dict = {
+        "prompt": prompt,
+        "completion": completion_response,
+        "c_dist": c_dist,
+    }
 
     print("Results:")
     print(json.dumps(result_dict, indent=4))
@@ -111,4 +101,21 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--prompt", "-p", type=str, default=None)
+    parser.add_argument(
+        "--decoding-method",
+        "-d",
+        type=str,
+        default="VanillaGreedy",
+        choices=["VanillaGreedy", "SLED", "dola"],
+    )
+
+    args = parser.parse_args()
+    prompt = args.prompt
+    decoding_method = args.decoding_method
+
+    if prompt is None:
+        prompt = "Jack has a stack of books that is 12 inches thick. He knows from experience that 80 pages is one inch thick. If he has 6 books, how many pages is each one on average?"  # noqa
+
+    main(prompt, decoding_method)
