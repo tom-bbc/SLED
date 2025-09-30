@@ -86,9 +86,11 @@ def main(prompt: str, decoding_method: str) -> dict:
     # Clean generated output
     if completion_response.startswith("\n"):
         cleaned_response = completion_response[1:]
-        cleaned_response = cleaned_response.split("\n")[0]
     else:
-        cleaned_response = completion_response.split("\n")[0]
+        cleaned_response = completion_response
+
+    cleaned_response = cleaned_response.replace(prompt, "")
+    cleaned_response = cleaned_response.split("\n")[0]
 
     # Formulate model output structures
     result_dict = {
