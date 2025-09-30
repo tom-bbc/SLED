@@ -92,6 +92,7 @@ def main(prompt: str, decoding_method: str) -> dict:
     result_dict = {
         "prompt": prompt,
         "raw_completion": completion_response,
+        "output": cleaned_response,
         "c_dist": c_dist,
     }
 
