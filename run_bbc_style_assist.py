@@ -81,10 +81,17 @@ def main(prompt: str, decoding_method: str) -> dict:
 
     print(f" << * >> Generated completion: \n{completion_response}", end="\n\n")
 
+    # Clean generated output
+    if completion_response.startswith("\n"):
+        cleaned_response = completion_response[1:]
+        cleaned_response = cleaned_response.split["\n"][0]
+    else:
+        cleaned_response = completion_response.split["\n"][0]
+
     # Formulate model output structures
     result_dict = {
         "prompt": prompt,
-        "completion": completion_response,
+        "raw_completion": completion_response,
         "c_dist": c_dist,
     }
 
