@@ -23,6 +23,7 @@ def main(prompt: str, decoding_method: str) -> dict:
     relative_top = 0.1
     relative_top_value = -1000.0
 
+    do_sample = False
     seed = 42
     evolution_rate = 2
     evolution_scale = 10
@@ -31,8 +32,8 @@ def main(prompt: str, decoding_method: str) -> dict:
 
     # Instantiate LLM with SLED decoding
     model = SLED_DecodedLLM(model_name, device, num_gpus, max_gpu_memory)
-    stop_word_list = ["Q:", "\\end{code}", "\n", ". "]
-    model.set_stop_words(stop_word_list)
+    # stop_word_list = ["Q:", "\\end{code}", "\n", ". "]
+    # model.set_stop_words(stop_word_list)
     print(f"\n << * >> Instantiated model: '{model_name}'")
 
     # Setup layers to use in decoding process
@@ -67,6 +68,7 @@ def main(prompt: str, decoding_method: str) -> dict:
     # Generate response over data sample
     completion_response, c_dist = model.generate(
         prompt,
+        do_sample=do_sample,
         max_new_tokens=max_new_tokens,
         temperature=temperature,
         repetition_penalty=repetition_penalty,
@@ -84,9 +86,9 @@ def main(prompt: str, decoding_method: str) -> dict:
     # Clean generated output
     if completion_response.startswith("\n"):
         cleaned_response = completion_response[1:]
-        cleaned_response = cleaned_response.split["\n"][0]
+        cleaned_response = cleaned_response.split("\n")[0]
     else:
-        cleaned_response = completion_response.split["\n"][0]
+        cleaned_response = completion_response.split("\n")[0]
 
     # Formulate model output structures
     result_dict = {
