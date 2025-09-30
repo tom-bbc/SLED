@@ -13,7 +13,7 @@ def main():
     model_name = "meta-llama/Llama-2-7b-hf"
     num_gpus = "auto"
     max_gpu_memory = 80
-    device = "cpu"
+    device = "cuda"
     data_path = "Data/FACTOR/wiki_factor.csv"
     output_path = "./gsm8k_result"
     early_exit_layers = None
