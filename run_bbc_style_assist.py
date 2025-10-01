@@ -13,7 +13,7 @@ transformers.logging.set_verbosity(100)
 def main(
     prompt: str,
     decoding_method: str,
-    evolution_rate: float = 2,
+    evolution_rate: float = 2.0,
     evolution_scale: int = 10,
     repetition_penalty: float = 1.0,
 ) -> dict:
@@ -23,15 +23,14 @@ def main(
     max_gpu_memory = 80
     device = "cuda"
     early_exit_layers = None
-
-    max_new_tokens = 256
-    temperature = 0.9
     relative_top = 0.1
     relative_top_value = -1000.0
-
     do_sample = False
-    seed = 42
+    max_new_tokens = 1024
+    temperature = 1.0
+    top_p = 1.0
 
+    seed = 42
     set_seed(seed)
 
     # Instantiate LLM with SLED decoding
@@ -77,6 +76,7 @@ def main(
         do_sample=do_sample,
         max_new_tokens=max_new_tokens,
         temperature=temperature,
+        top_p=top_p,
         repetition_penalty=repetition_penalty,
         mode=decoding_method,
         mature_layer=mature_layer,
@@ -123,7 +123,7 @@ if __name__ == "__main__":
         default="VanillaGreedy",
         choices=["VanillaGreedy", "SLED", "dola"],
     )
-    parser.add_argument("--evolution_rate", type=float, default=2)
+    parser.add_argument("--evolution_rate", type=float, default=2.0)
     parser.add_argument("--evolution_scale", type=int, default=10)
     parser.add_argument("--repetition_penalty", type=float, default=1.0)
 

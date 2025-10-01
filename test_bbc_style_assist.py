@@ -33,9 +33,9 @@ def test():
             generation = main(prompt, decoder)
             sample_result["outputs"][decoder] = generation["output"]
 
-        sample_result["sled_result_different"] = (
+        sample_result["results_are_equal"] = (
             sample_result["outputs"]["SLED"]
-            != sample_result["outputs"]["VanillaGreedy"]
+            == sample_result["outputs"]["VanillaGreedy"]
         )
 
         results.append(sample_result)
@@ -47,6 +47,7 @@ def test():
     results_str = json.dumps(results, indent=4)
     print(results_str)
 
+    # Save results to file
     output_file = "Results/results_golden_dataset.json"
     with open(output_file, "w", encoding="utf-8") as fp:
         fp.write(results_str)
