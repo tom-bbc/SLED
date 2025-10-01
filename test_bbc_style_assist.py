@@ -16,6 +16,7 @@ def test():
     # Set hyperparameters
     decoding_methods = ["VanillaGreedy", "dola", "SLED"]
     results = []
+    num_changed_responses = 0
 
     # Run generation for each sample
     for test_sample in samples:
@@ -33,10 +34,13 @@ def test():
             generation = main(prompt, decoder)
             sample_result["outputs"][decoder] = generation["output"]
 
-        sample_result["results_are_equal"] = (
+        sample_result["identical_response"] = (
             sample_result["outputs"]["SLED"]
             == sample_result["outputs"]["VanillaGreedy"]
         )
+
+        if not sample_result["identical_response"]:
+            num_changed_responses += 1
 
         results.append(sample_result)
 
@@ -51,6 +55,11 @@ def test():
     output_file = "Results/results_golden_dataset.json"
     with open(output_file, "w", encoding="utf-8") as fp:
         fp.write(results_str)
+
+    print(f" << * >> Results saved to file: '{output_file}'")
+    print(
+        f" << * >> Number of responses changed by using SLED: {num_changed_responses}"
+    )
 
 
 if __name__ == "__main__":

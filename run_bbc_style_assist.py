@@ -13,15 +13,18 @@ transformers.logging.set_verbosity(100)
 def main(
     prompt: str,
     decoding_method: str,
-    evolution_rate: float = 2.0,
+    evolution_rate: int = 2,
     evolution_scale: int = 10,
     repetition_penalty: float = 1.0,
 ) -> dict:
     # Hyperparameters
-    model_name = "meta-llama/Llama-2-7b-hf"
+    # model_name = "meta-llama/Llama-2-7b-hf"
+    model_name = "meta-llama/Llama-3.1-8B"
+
+    device = "cuda"
     num_gpus = "auto"
     max_gpu_memory = 80
-    device = "cuda"
+
     early_exit_layers = None
     relative_top = 0.1
     relative_top_value = -1000.0
@@ -71,7 +74,7 @@ def main(
     print(f" << * >> Input prompt: \n{prompt}", end="\n\n")
 
     # Generate response over data sample
-    completion_response, c_dist = model.generate(
+    completion_response, _ = model.generate(
         prompt,
         do_sample=do_sample,
         max_new_tokens=max_new_tokens,
@@ -104,7 +107,6 @@ def main(
         "prompt": prompt,
         "raw_completion": completion_response,
         "output": cleaned_response,
-        "c_dist": c_dist,
     }
 
     print(" << * >> Results:")
@@ -123,7 +125,7 @@ if __name__ == "__main__":
         default="VanillaGreedy",
         choices=["VanillaGreedy", "SLED", "dola"],
     )
-    parser.add_argument("--evolution_rate", type=float, default=2.0)
+    parser.add_argument("--evolution_rate", type=int, default=2)
     parser.add_argument("--evolution_scale", type=int, default=10)
     parser.add_argument("--repetition_penalty", type=float, default=1.0)
 
