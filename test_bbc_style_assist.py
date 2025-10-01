@@ -40,13 +40,16 @@ def test():
 
         results.append(sample_result)
 
-        print("\n-------------------- ALL RESULTS --------------------")
-        results_str = json.dumps(sample_result, indent=4)
-        print(results_str)
+        print("\n-------------------- SAMPLE RESULTS --------------------")
+        print(json.dumps(sample_result, indent=4))
 
-        output_file = "Results/results_golden_dataset.json"
-        with open(output_file, "w", encoding="utf-8") as fp:
-            fp.write(results_str)
+    print("\n\n#################### FULL RESULTS ####################")
+    results_str = json.dumps(results, indent=4)
+    print(results_str)
+
+    output_file = "Results/results_golden_dataset.json"
+    with open(output_file, "w", encoding="utf-8") as fp:
+        fp.write(results_str)
 
 
 if __name__ == "__main__":
