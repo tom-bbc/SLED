@@ -13,9 +13,9 @@ transformers.logging.set_verbosity(100)
 def main(
     prompt: str,
     decoding_method: str,
-    evolution_rate: float,
-    evolution_scale: int,
-    repetition_penalty: float,
+    evolution_rate: float = 2,
+    evolution_scale: int = 10,
+    repetition_penalty: float = 1.0,
 ) -> dict:
     # Hyperparameters
     model_name = "meta-llama/Llama-2-7b-hf"
