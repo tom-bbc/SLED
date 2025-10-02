@@ -12,15 +12,13 @@ transformers.logging.set_verbosity(100)
 
 def main(
     prompt: str,
+    model_name: str,
     decoding_method: str,
     evolution_rate: int = 2,
     evolution_scale: int = 10,
     repetition_penalty: float = 1.0,
 ) -> dict:
     # Hyperparameters
-    # model_name = "meta-llama/Llama-2-7b-hf"
-    model_name = "meta-llama/Llama-3.1-8B"
-
     device = "cuda"
     num_gpus = "auto"
     max_gpu_memory = 80
@@ -48,18 +46,22 @@ def main(
     if decoding_method == "VanillaGreedy":
         if early_exit_layers is not None:
             warnings.warn(
-                " -- * -- The 'early_exit_layers' argument should be None when using Vanilla greedy decoding."
+                " -- * -- Setting the 'early_exit_layers' param to None when using "
+                "Vanilla greedy decoding."
             )
+            early_exit_layers = None
 
         mature_layer = None
         candidate_premature_layers = None
         print(" << * >> Decoding mode: Vanilla greedy decoding from the final layer")
 
     else:
-        if early_exit_layers is None:
-            early_exit_layers = [int(x) for x in range(model.num_layers + 1)]
+        if isinstance(early_exit_layers, str):
+            early_exit_layers = early_exit_layers.split(",")
+            early_exit_layers = [int(layer) for layer in early_exit_layers]
+
         else:
-            early_exit_layers = [int(x) for x in early_exit_layers.split(",")]
+            early_exit_layers = [int(x) for x in range(model.num_layers + 1)]
 
         mature_layer = early_exit_layers[-1]
         candidate_premature_layers = early_exit_layers[:-1]
@@ -117,6 +119,7 @@ def main(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model", "-m", type=str, default="meta-llama/Llama-2-7b-hf")
     parser.add_argument("--prompt", "-p", type=str, default=None)
     parser.add_argument(
         "--decoding_method",
@@ -135,8 +138,18 @@ if __name__ == "__main__":
     evolution_rate = args.evolution_rate
     evolution_scale = args.evolution_scale
     repetition_penalty = args.repetition_penalty
+    model_name = args.model
+
+    # model_name = "meta-llama/Llama-3.1-8B"
 
     if prompt is None:
         prompt = "Jack has a stack of books that is 12 inches thick. He knows from experience that 80 pages is one inch thick. If he has 6 books, how many pages is each one on average?"  # noqa
 
-    main(prompt, decoding_method, evolution_rate, evolution_scale, repetition_penalty)
+    main(
+        prompt,
+        model_name,
+        decoding_method,
+        evolution_rate,
+        evolution_scale,
+        repetition_penalty,
+    )

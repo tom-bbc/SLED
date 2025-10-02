@@ -15,6 +15,7 @@ def test():
 
     # Set hyperparameters
     decoding_methods = ["VanillaGreedy", "dola", "SLED"]
+    model_name = "meta-llama/Llama-2-7b-hf"
     results = []
     num_changed_responses = 0
 
@@ -31,15 +32,15 @@ def test():
         for decoder in decoding_methods:
             print(f"\n-------------------- {decoder.upper()} --------------------")
 
-            generation = main(prompt, decoder)
+            generation = main(prompt, model_name, decoder)
             sample_result["outputs"][decoder] = generation["output"]
 
-        sample_result["identical_response"] = (
+        sample_result["identical_responses"] = (
             sample_result["outputs"]["SLED"]
             == sample_result["outputs"]["VanillaGreedy"]
         )
 
-        if not sample_result["identical_response"]:
+        if not sample_result["identical_responses"]:
             num_changed_responses += 1
 
         results.append(sample_result)
